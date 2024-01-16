@@ -1,0 +1,49 @@
+### Create course
+POST localhost:8081/course
+Content-Type: application/json
+
+{
+  "name": "aaaaaaaaaaaaa",
+  "price": 2000,
+  "duration": "aaalalalal"
+}
+
+### Get course list
+GET localhost:8081/course
+
+### Get course By Id
+GET localhost:8081/course/1
+
+### Get course By name
+GET localhost:8081/course/byName?name=Del
+
+### Get course By duration
+GET localhost:8081/course/byDuration?duration=aaalalalal
+
+### Get course By price
+GET localhost:8081/course/byPrice?price=21
+
+### Get course By createdDateBetween
+GET localhost:8081/course/byCreatedDateBetween?createdDate1=2023-01-30T23:14:34.609816&createdDate2=2023-03-22T23:14:34.609816
+
+### Get course By priceBetween
+GET localhost:8081/course/byPriceBetween?price1=7&price2=10
+### Get course By getCoursePaginationByCreatedDate
+GET localhost:8081/course/getCoursePaginationSortCreatedDate?page=1
+### Get course By getCoursePaginationByPrice
+GET localhost:8081/course/getCoursePaginationByPrice?page=1&price=71
+
+### Update course by id
+PUT localhost:8081/course/1
+Content-Type: application/json
+
+{
+  "name": "qolgan",
+  "price": 3000
+}
+
+###Delete course by id
+DELETE localhost:8081/course/3
+
+###Search course by name and title
+GET localhost:8081/course/search?name=e&title=f

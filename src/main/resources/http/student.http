@@ -1,0 +1,57 @@
+### Create Student
+POST localhost:8081/student
+Content-Type: application/json
+
+{
+  "name": "aaa",
+  "surname": "bbb",
+  "phone": "+88",
+  "level": "2",
+  "gender": "WOMAN",
+  "age": 20
+}
+
+### Get student list
+GET localhost:8081/student
+
+### Get student By Id
+GET localhost:8081/student/2
+
+### Get student By age
+GET localhost:8081/student/byAge?age=12
+
+### Get student By gender
+GET localhost:8081/student/byGender?gender=MALE
+
+### Get student By level
+GET localhost:8081/student/byLevel?level=2
+
+### Get student By createdDate
+GET localhost:8081/student/byCreatedDate?createdDate=2023-09-19
+
+### Get student By createdDateBetween
+GET localhost:8081/student/byCreatedDateBetween?createdDate1=2023-01-10T23:14:34.609816&createdDate2=2023-04-28T23:14:34.609816
+
+###Get student by getPaginationByLevel
+GET localhost:8081/student/getPaginationByLevel?page=2&level=4
+###Get student by getPaginationByGender
+GET localhost:8081/student/getPaginationByGender?page=2&gender=MaLe
+
+
+### Update student by id
+PUT localhost:8081/student/2
+Content-Type: application/json
+
+{
+  "name": "ccccccc",
+  "surname": "pppppp",
+  "phone": "+022",
+  "age": 28
+}
+
+
+###Delete student by id
+DELETE localhost:8081/student/6
+
+###Search student by name and surname
+GET localhost:8081/student/search?name=hu&surname=teshayev

@@ -1,0 +1,72 @@
+### Created studentCourseMark
+POST localhost:8081/student_course_mark
+Content-Type: application/json
+
+{
+  "mark": 5,
+  "studentId": 1,
+  "courseId": 10
+}
+
+### Get student list
+GET localhost:8081/student_course_mark
+
+### Get student By Id
+GET localhost:8081/student_course_mark/2
+
+### Get student By Id
+GET localhost:8081/student_course_mark/details/2
+
+### Update student by id
+PUT localhost:8081/student_course_mark/2
+Content-Type: application/json
+
+{
+ "mark": 2,
+  "studentId": 1,
+  "courseId": 10
+}
+
+###Delete student by id
+DELETE localhost:8081/student_course_mark/7
+
+### Get student mark By createdDate
+GET localhost:8081/student_course_mark/getMark?created_date=2024-01-13&id=1
+
+### Get student mark By createdDate between
+GET localhost:8081/student_course_mark/getMarkBetween?from=2024-01-13&to=2024-01-14&id=3
+
+### Get student mark By createdDate desc
+GET localhost:8081/student_course_mark/getMarkDesc?id=1
+
+### Get student mark By createdDate desc
+GET localhost:8081/student_course_mark/getMarkCreatedDateDesc2?studentId=1&couseId=10
+### Get student mark By createdDate desc limint 1
+GET localhost:8081/student_course_mark/getMarkCreatedDateDescLimit1?studentId=1&couseId=10
+### Get student mark and course name By createdDate desc limint 1
+GET localhost:8081/student_course_mark/getCourseName?studentId=1&couseId=10
+### Get student  course mark  limint 3
+GET localhost:8081/student_course_mark/getMarkLimit3?studentId=1
+### Get student  course firstMark
+GET localhost:8081/student_course_mark/getFirstMark?studentId=1
+### Get student  course firstMark2
+GET localhost:8081/student_course_mark/getFirstMark2?studentId=1&courseId=10
+### Get student  course MaxMark
+GET localhost:8081/student_course_mark/getMaxMark?studentId=1&courseId=10
+### Get student  course AverageMark
+GET localhost:8081/student_course_mark/getAverageMark?studentId=1
+### Get student  course AverageMark2
+GET localhost:8081/student_course_mark/getAverageMark2?studentId=1&courseId=10
+### Get student  course AverageMark2
+GET localhost:8081/student_course_mark/getGreaterThanAScoreCount?studentId=1&mark=4
+### Get student  course getHighestGradeInTheCourse
+GET localhost:8081/student_course_mark/getHighestGradeInTheCourse?courseId=10
+### Get student  course getAverageGradeOfTheCourse
+GET localhost:8081/student_course_mark/getAverageGradeOfTheCourse?courseId=10
+### Get student  course getAverageGradeOfTheCourse
+GET localhost:8081/student_course_mark/getNumberOfGradesInTheCourse?courseId=1
+### Get course By getCoursePaginationByPrice
+GET localhost:8081/student_course_mark/getCoursePaginationById?page=1&studentId=1
+
+
+###2024-01-13T18:02:31.085951
