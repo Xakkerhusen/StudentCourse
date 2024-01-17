@@ -17,6 +17,10 @@ GET localhost:8081/student
 ### Get student By Id
 GET localhost:8081/student/2
 
+### Get student By name
+GET localhost:8081/student/byName?name=Husein
+### Get student By name
+GET localhost:8081/student/bySurname?surname=Devons
 ### Get student By age
 GET localhost:8081/student/byAge?age=12
 
@@ -30,10 +34,10 @@ GET localhost:8081/student/byLevel?level=2
 GET localhost:8081/student/byCreatedDate?createdDate=2023-09-19
 
 ### Get student By createdDateBetween
-GET localhost:8081/student/byCreatedDateBetween?createdDate1=2023-01-10T23:14:34.609816&createdDate2=2023-04-28T23:14:34.609816
+GET localhost:8081/student/byCreatedDateBetween?createdDate1=2023-01-10&createdDate2=2023-04-28
 
 ###Get student by getPaginationByLevel
-GET localhost:8081/student/getPaginationByLevel?page=2&level=4
+GET localhost:8081/student/getPaginationByLevel?page=1&level=4
 ###Get student by getPaginationByGender
 GET localhost:8081/student/getPaginationByGender?page=2&gender=MaLe
 

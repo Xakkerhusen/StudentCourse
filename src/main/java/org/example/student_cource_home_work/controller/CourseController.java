@@ -66,8 +66,8 @@ public class CourseController {
     }
 
     @GetMapping("/byCreatedDateBetween")//8
-    public ResponseEntity<List<Course>> getCreatedDateBetween(@RequestParam("createdDate1") LocalDateTime fromCreatedDate,
-                                                               @RequestParam("createdDate2") LocalDateTime toCreatedDate) {
+    public ResponseEntity<List<Course>> getCreatedDateBetween(@RequestParam("createdDate1") LocalDate fromCreatedDate,
+                                                               @RequestParam("createdDate2") LocalDate toCreatedDate) {
         return ResponseEntity.ok( courseService.getByCreatedDateBetween(fromCreatedDate,toCreatedDate));
     }
 

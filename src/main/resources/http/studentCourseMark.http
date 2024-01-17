@@ -50,7 +50,7 @@ GET localhost:8081/student_course_mark/getMarkLimit3?studentId=1
 ### Get student  course firstMark
 GET localhost:8081/student_course_mark/getFirstMark?studentId=1
 ### Get student  course firstMark2
-GET localhost:8081/student_course_mark/getFirstMark2?studentId=1&courseId=10
+GET localhost:8081/student_course_mark/getFirstMark2?studentId=1&courseId=1
 ### Get student  course MaxMark
 GET localhost:8081/student_course_mark/getMaxMark?studentId=1&courseId=10
 ### Get student  course AverageMark
@@ -58,7 +58,7 @@ GET localhost:8081/student_course_mark/getAverageMark?studentId=1
 ### Get student  course AverageMark2
 GET localhost:8081/student_course_mark/getAverageMark2?studentId=1&courseId=10
 ### Get student  course AverageMark2
-GET localhost:8081/student_course_mark/getGreaterThanAScoreCount?studentId=1&mark=4
+GET localhost:8081/student_course_mark/getGreaterThanAScoreCount?studentId=1&mark=5
 ### Get student  course getHighestGradeInTheCourse
 GET localhost:8081/student_course_mark/getHighestGradeInTheCourse?courseId=10
 ### Get student  course getAverageGradeOfTheCourse
@@ -67,6 +67,11 @@ GET localhost:8081/student_course_mark/getAverageGradeOfTheCourse?courseId=10
 GET localhost:8081/student_course_mark/getNumberOfGradesInTheCourse?courseId=1
 ### Get course By getCoursePaginationByPrice
 GET localhost:8081/student_course_mark/getCoursePaginationById?page=1&studentId=1
-
+###Get student pagination
+GET localhost:8081/student_course_mark/pagination?page=2&size=2
+###Get student pagination  by given studentId
+GET localhost:8081/student_course_mark/paginationByStudentId?page=3&studentId=1
+###Get student pagination  by given studentId
+GET localhost:8081/student_course_mark/paginationByCourseId?page=1&courseId=10
 
 ###2024-01-13T18:02:31.085951

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +102,7 @@ public class CourseService {
     }
 
     public List<Course> getByName(String name) {
-        List<CourseEntity> entityList = courseRepository.findByName(name);
+        List<CourseEntity> entityList = courseRepository.findByNameQuery(name);
         List<Course> dtoList = new LinkedList<>();
         for (CourseEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -110,7 +111,7 @@ public class CourseService {
     }
 
     public List<Course> getByDuration(String duration) {
-        List<CourseEntity> entityList = courseRepository.findByDuration(duration);
+        List<CourseEntity> entityList = courseRepository.findByDurationQuery(duration);
         List<Course> dtoList = new LinkedList<>();
         for (CourseEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -119,7 +120,7 @@ public class CourseService {
     }
 
     public List<Course> getByPrice(Double price) {
-        List<CourseEntity> entityList = courseRepository.findByPrice(price);
+        List<CourseEntity> entityList = courseRepository.findByPriceQuery(price);
         List<Course> dtoList = new LinkedList<>();
         for (CourseEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -127,8 +128,10 @@ public class CourseService {
         return dtoList;
     }
 
-    public List<Course> getByCreatedDateBetween(LocalDateTime fromCreatedDate, LocalDateTime toCreatedDate) {
-        List<CourseEntity> entityList = courseRepository.findByCreatedDateBetween(fromCreatedDate, toCreatedDate);
+    public List<Course> getByCreatedDateBetween(LocalDate fromCreatedDate, LocalDate toCreatedDate) {
+        LocalDateTime from = LocalDateTime.of(fromCreatedDate, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime.of(toCreatedDate, LocalTime.MAX);
+        List<CourseEntity> entityList = courseRepository.findByCreatedDateBetweenQuery(from, to);
         List<Course> studentList = new LinkedList<>();
         for (CourseEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
@@ -137,7 +140,7 @@ public class CourseService {
     }
 
     public List<Course> getByPriceBetween(Double fromPrice, Double toPrice) {
-        List<CourseEntity> entityList = courseRepository.findByPriceBetween(fromPrice, toPrice);
+        List<CourseEntity> entityList = courseRepository.findByPriceBetweenQuery(fromPrice, toPrice);
         List<Course> studentList = new LinkedList<>();
         for (CourseEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
@@ -158,7 +161,7 @@ public class CourseService {
         return new PageImpl<>(dtoList, pageable, totalElements);
     }
     public PageImpl<Course> getCoursePaginationByPrice(Pageable pageable, Integer price) {
-        Page<CourseEntity> byPrice = courseRepository.findByPrice(pageable, price);
+        Page<CourseEntity> byPrice = courseRepository.findByPriceQuery(pageable, price);
         List<Course>dtoList=new LinkedList<>();
         List<CourseEntity> content = byPrice.getContent();
         long totalElements = byPrice.getTotalElements();

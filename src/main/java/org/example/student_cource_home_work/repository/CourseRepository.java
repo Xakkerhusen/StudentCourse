@@ -15,12 +15,18 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends CrudRepository<CourseEntity, Integer>, PagingAndSortingRepository<CourseEntity, Integer> {
-    List<CourseEntity> findByName(String name);
-    List<CourseEntity> findByDuration(String duration);
-    List<CourseEntity> findByPrice(Double price);
-    List<CourseEntity> findByCreatedDateBetween(LocalDateTime fromCreatedDate, LocalDateTime toCreatedDate);
-    List<CourseEntity> findByPriceBetween(Double fromPrice, Double toPrice);
-    Page<CourseEntity>findByPrice(Pageable pageable,Integer price);
+   @Query("from CourseEntity where name=?1")
+    List<CourseEntity> findByNameQuery(String name);
+   @Query("from CourseEntity where duration=?1")
+    List<CourseEntity> findByDurationQuery(String duration);
+   @Query("from CourseEntity where price=?1")
+    List<CourseEntity> findByPriceQuery(Double price);
+   @Query("from CourseEntity where createdDate between ?1 and ?2")
+    List<CourseEntity> findByCreatedDateBetweenQuery(LocalDateTime fromCreatedDate, LocalDateTime toCreatedDate);
+   @Query("from CourseEntity where price between ?1 and ?2")
+    List<CourseEntity> findByPriceBetweenQuery(Double fromPrice, Double toPrice);
+   @Query("from CourseEntity where price=?1 ")
+    Page<CourseEntity>findByPriceQuery(Pageable pageable,Integer price);
 
 
 }

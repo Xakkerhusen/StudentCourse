@@ -69,12 +69,12 @@ public class StudentController {
         return ResponseEntity.ok( studentService.getByLevel(level));
     }
     @GetMapping("/byCreatedDate")//7
-    public ResponseEntity<List<Student>> getCreatedDate(@RequestParam("createdDate") LocalDateTime createdDate) {
+    public ResponseEntity<List<Student>> getCreatedDate(@RequestParam("createdDate") LocalDate createdDate) {
         return ResponseEntity.ok( studentService.getByCreatedDate(createdDate));
     }
     @GetMapping("/byCreatedDateBetween")//8
-    public ResponseEntity<List<Student>> getCreatedDateBetween(@RequestParam("createdDate1") LocalDateTime fromCreatedDate,
-                                                               @RequestParam("createdDate2") LocalDateTime toCreatedDate) {
+    public ResponseEntity<List<Student>> getCreatedDateBetween(@RequestParam("createdDate1") LocalDate fromCreatedDate,
+                                                               @RequestParam("createdDate2") LocalDate toCreatedDate) {
         return ResponseEntity.ok( studentService.getByCreatedDateBetween(fromCreatedDate,toCreatedDate));
     }
     @GetMapping("/getPaginationByLevel")//10

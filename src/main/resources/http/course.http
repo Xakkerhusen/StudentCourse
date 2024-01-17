@@ -24,7 +24,7 @@ GET localhost:8081/course/byDuration?duration=aaalalalal
 GET localhost:8081/course/byPrice?price=21
 
 ### Get course By createdDateBetween
-GET localhost:8081/course/byCreatedDateBetween?createdDate1=2023-01-30T23:14:34.609816&createdDate2=2023-03-22T23:14:34.609816
+GET localhost:8081/course/byCreatedDateBetween?createdDate1=2023-01-30&createdDate2=2023-03-22
 
 ### Get course By priceBetween
 GET localhost:8081/course/byPriceBetween?price1=7&price2=10

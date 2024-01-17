@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -111,7 +113,7 @@ public class StudentService {
         return toDTO(entity);
     }
     public List<Student> getByName(String name) {
-        List<StudentEntity> entityList = studentRepository.findByName(name);
+        List<StudentEntity> entityList = studentRepository.findByNameQuery(name);
         List<Student> dtoList = new LinkedList<>();
         for (StudentEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -120,7 +122,7 @@ public class StudentService {
     }
 
  public List<Student> getBySurname(String surname) {
-        List<StudentEntity> entityList = studentRepository.findBySurname(surname);
+        List<StudentEntity> entityList = studentRepository.findBySurnameQuery(surname);
         List<Student> dtoList = new LinkedList<>();
         for (StudentEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -128,7 +130,7 @@ public class StudentService {
         return dtoList;
     }
     public List<Student> getByAge(Integer age) {
-        List<StudentEntity> entityList = studentRepository.findByAge(age);
+        List<StudentEntity> entityList = studentRepository.findByAgeQuery(age);
         List<Student> dtoList = new LinkedList<>();
         for (StudentEntity entity : entityList) {
             dtoList.add(toDTO(entity));
@@ -136,7 +138,7 @@ public class StudentService {
         return dtoList;
     }
     public List<Student> getByGender(Gender gender) {
-        List<StudentEntity>entityList=studentRepository.findByGender(gender);
+        List<StudentEntity>entityList=studentRepository.findByGenderQuery(gender);
         List<Student>studentList=new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
@@ -144,23 +146,27 @@ public class StudentService {
         return studentList;
     }
     public List<Student> getByLevel(Integer level) {
-        List<StudentEntity>entityList=studentRepository.findByLevel(level);
+        List<StudentEntity>entityList=studentRepository.findByLevelQuery(level);
         List<Student>studentList=new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
-    public List<Student> getByCreatedDate(LocalDateTime createdDate) {
-        List<StudentEntity>entityList=studentRepository.findByCreatedDate(createdDate);
+    public List<Student> getByCreatedDate(LocalDate createdDate) {
+        LocalDateTime from = LocalDateTime.of(createdDate, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime.of(createdDate, LocalTime.MAX);
+        List<StudentEntity>entityList=studentRepository.findByCreatedDateBetweenQuery(from,to);
         List<Student>studentList=new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
-    public List<Student> getByCreatedDateBetween(LocalDateTime fromCreatedDate, LocalDateTime toCreatedDate) {
-        List<StudentEntity>entityList=studentRepository.findByCreatedDateBetween(fromCreatedDate,toCreatedDate);
+    public List<Student> getByCreatedDateBetween(LocalDate fromCreatedDate, LocalDate toCreatedDate) {
+        LocalDateTime from = LocalDateTime.of(fromCreatedDate, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime.of(toCreatedDate, LocalTime.MAX);
+        List<StudentEntity>entityList=studentRepository.findByCreatedDateBetweenQuery(from,to);
         List<Student>studentList=new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
@@ -168,9 +174,9 @@ public class StudentService {
         return studentList;
     }
     public PageImpl<Student> getPaginationByLevel(Integer page, Integer size, Integer level) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "level");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page - 1, size,sort);
-        Page<StudentEntity> studentPage = studentRepository.findByLevel(level,pageable);
+        Page<StudentEntity> studentPage = studentRepository.findByLevelQuery(level,pageable);
 
         List<StudentEntity> content = studentPage.getContent();
         Long totalElements = studentPage.getTotalElements();
@@ -182,11 +188,10 @@ public class StudentService {
         return new PageImpl<>(dtoList,pageable,totalElements);
     }
     public PageImpl<Student> getPaginationByGender(Integer page, Integer size, String gender) {
-//        String gender1 = String.valueOf(gender);
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         Gender gender1 = Gender.valueOf(gender.toUpperCase());
-        Page<StudentEntity> byGender = studentRepository.findByGender(gender1, pageable);
+        Page<StudentEntity> byGender = studentRepository.findByGenderQuery(gender1, pageable);
         List<StudentEntity> content = byGender.getContent();
         long totalElements = byGender.getTotalElements();
         List<Student>dtoList=new LinkedList<>();
