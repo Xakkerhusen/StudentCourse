@@ -1,14 +1,14 @@
 package org.example.student_cource_home_work.service;
 
-import org.example.student_cource_home_work.dto.Course;
-import org.example.student_cource_home_work.dto.Student;
-import org.example.student_cource_home_work.dto.StudentCourseMark;
+import org.example.student_cource_home_work.dto.*;
 import org.example.student_cource_home_work.entity.CourseEntity;
 import org.example.student_cource_home_work.entity.StudentCourseMarkEntity;
 import org.example.student_cource_home_work.entity.StudentEntity;
 import org.example.student_cource_home_work.exp.AppBadException;
+import org.example.student_cource_home_work.mapper.Mapper;
 import org.example.student_cource_home_work.record.Result;
 import org.example.student_cource_home_work.repository.CourseRepository;
+import org.example.student_cource_home_work.repository.CustomRepository;
 import org.example.student_cource_home_work.repository.StudentCourseMarkRepository;
 import org.example.student_cource_home_work.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,8 @@ public class StudentCourseMarkService {
     private StudentService studentService;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    CustomRepository customRepository;
 
     public StudentCourseMark create(StudentCourseMark dto) {
         StudentEntity student = studentService.get(dto.getStudentId());
@@ -173,7 +175,7 @@ public class StudentCourseMarkService {
 
     public List<StudentCourseMark> getMarkDesc(Integer id) {
         Integer id2 = get(id).getStudent().getId();
-        if (id2==null) {
+        if (id2 == null) {
             throw new AppBadException("Student not found");
         }
         List<StudentCourseMarkEntity> byStudentCreatedDateDesc =
@@ -295,7 +297,7 @@ public class StudentCourseMarkService {
 
     public Integer getGreaterThanAScoreCount(Integer studentId, Double mark) {
         Integer id = get(studentId).getStudent().getId();
-        if (id== null) {
+        if (id == null) {
             throw new AppBadException("Student not found");
         }
 
@@ -312,7 +314,7 @@ public class StudentCourseMarkService {
 
     public Integer getHighestGradeInTheCourse(Integer courseId) {
         Integer id = get(courseId).getCourse().getId();
-        if (id== null) {
+        if (id == null) {
             throw new AppBadException("Course not found");
         }
         Optional<StudentCourseMarkEntity> byCourseOrderByMarkDesc =
@@ -320,9 +322,10 @@ public class StudentCourseMarkService {
         return byCourseOrderByMarkDesc.get().getMark();
 
     }
+
     public Double getAverageGradeOfTheCourse(Integer courseId) {
         Integer id = get(courseId).getCourse().getId();
-        if (id== null) {
+        if (id == null) {
             throw new AppBadException("Course not found");
         }
         Double sum = 0.0;
@@ -339,35 +342,38 @@ public class StudentCourseMarkService {
         return average;
 
     }
+
     public Integer getNumberOfGradesInTheCourse(Integer courseId) {
         Integer id = get(courseId).getCourse().getId();
-        if (id== null) {
+        if (id == null) {
             throw new AppBadException("Course not found");
         }
         Iterable<StudentCourseMarkEntity> all = studentCourseMarkRepository.findAll();
-            int count=0;
+        int count = 0;
         for (StudentCourseMarkEntity entity : all) {
-            if (entity.getCourse().getId().equals(id)){
+            if (entity.getCourse().getId().equals(id)) {
                 count++;
             }
         }
         return count;
     }
-public PageImpl<StudentCourseMark> pagination(Pageable pageable) {
-    Page<StudentCourseMarkEntity> all = studentCourseMarkRepository.findAll(pageable);
 
-    List<StudentCourseMarkEntity> content = all.getContent();
-    long totalElements = all.getTotalElements();
+    public PageImpl<StudentCourseMark> pagination(Pageable pageable) {
+        Page<StudentCourseMarkEntity> all = studentCourseMarkRepository.findAll(pageable);
 
-    List<StudentCourseMark> dtoList = new LinkedList<>();
+        List<StudentCourseMarkEntity> content = all.getContent();
+        long totalElements = all.getTotalElements();
 
-    for (StudentCourseMarkEntity studentCourseMarkEntity : content) {
-        dtoList.add(toDTO(studentCourseMarkEntity));
+        List<StudentCourseMark> dtoList = new LinkedList<>();
+
+        for (StudentCourseMarkEntity studentCourseMarkEntity : content) {
+            dtoList.add(toDTO(studentCourseMarkEntity));
+        }
+
+        return new PageImpl<>(dtoList, pageable, totalElements);
     }
 
-    return new PageImpl<>(dtoList, pageable, totalElements);
-}
-    public PageImpl<StudentCourseMark> paginationByStudentId(Integer studentId,Pageable pageable) {
+    public PageImpl<StudentCourseMark> paginationByStudentId(Integer studentId, Pageable pageable) {
         Page<StudentCourseMarkEntity> allByStudentId = studentCourseMarkRepository.findAllByStudentId(pageable, studentId);
 
         List<StudentCourseMarkEntity> content = allByStudentId.getContent();
@@ -376,10 +382,14 @@ public PageImpl<StudentCourseMark> pagination(Pageable pageable) {
         for (StudentCourseMarkEntity studentCourseMarkEntity : content) {
             dtoList.add(toDTO(studentCourseMarkEntity));
         }
+        int pageSize = pageable.getPageSize();
+        System.out.println("pageable.getPageNumber() = " + pageable.getPageNumber());
+        System.out.println("pageSize = " + pageSize);
 
         return new PageImpl<>(dtoList, pageable, totalElements);
     }
-    public PageImpl<StudentCourseMark> paginationByCourseId(Integer courseId,Pageable pageable) {
+
+    public PageImpl<StudentCourseMark> paginationByCourseId(Integer courseId, Pageable pageable) {
         Page<StudentCourseMarkEntity> allByCourseId = studentCourseMarkRepository.findAllByCourseId(pageable, courseId);
 
         List<StudentCourseMarkEntity> content = allByCourseId.getContent();
@@ -392,6 +402,7 @@ public PageImpl<StudentCourseMark> pagination(Pageable pageable) {
         }
         return new PageImpl<>(dtoList, pageable, totalElements);
     }
+
     public StudentCourseMark toDTO(StudentCourseMarkEntity entity) {
         StudentCourseMark dto = new StudentCourseMark();
         dto.setId(entity.getId());
@@ -428,5 +439,87 @@ public PageImpl<StudentCourseMark> pagination(Pageable pageable) {
     }
 
 
+    public List<StudentCourseMark> getByStudentIdMarkList(Integer id) {
+        StudentCourseMarkEntity entity = get(id);
+        if (entity == null) {
+            throw new AppBadException("Student not found");
+        }
+        List<Mapper> mapper100 = studentCourseMarkRepository.getByStudentId(id);
+        List<StudentCourseMark> resultList = new LinkedList<>();
+        for (Mapper mapper : mapper100) {
+            StudentCourseMark dto = new StudentCourseMark();
+            Course course = new Course();
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
 
+            course.setId(mapper.getCourseId());
+            course.setName(mapper.getName());
+            course.setDuration(mapper.getDuration());
+
+            dto.setCourse(course);
+            resultList.add(dto);
+        }
+        return resultList;
+    }
+
+    public List<StudentCourseMark> getByCourseIdMarkList(Integer id) {
+        StudentCourseMarkEntity entity = get(id);
+        if (entity == null) {
+            throw new AppBadException("Course not found");
+        }
+        List<Mapper> mapper100 = studentCourseMarkRepository.getByCourseId(id);
+        List<StudentCourseMark> resultList = new LinkedList<>();
+        for (Mapper mapper : mapper100) {
+            StudentCourseMark dto = new StudentCourseMark();
+            Student student = new Student();
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
+
+            student.setId(mapper.getCourseId());
+            student.setName(mapper.getName());
+            student.setSurname(mapper.getSurname());
+            dto.setStudent(student);
+            resultList.add(dto);
+        }
+        return resultList;
+    }
+
+    public List<StudentCourseMark> getAllByInnerJoin() {
+        List<Mapper> mapper100 = studentCourseMarkRepository.getAll();
+        List<StudentCourseMark> resultList = new LinkedList<>();
+        for (Mapper mapper : mapper100) {
+            StudentCourseMark dto = new StudentCourseMark();
+            Student student = new Student();
+            Course course = new Course();
+
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
+
+            student.setId(mapper.getCourseId());
+            student.setName(mapper.getName());
+            student.setSurname(mapper.getSurname());
+            course.setId(mapper.getCourseId());
+            course.setName(mapper.getName());
+            course.setPrice(mapper.getPrice());
+
+            dto.setCourse(course);
+            dto.setStudent(student);
+            resultList.add(dto);
+        }
+        return resultList;
+
+    }
+
+    public PageImpl<StudentCourseMark> filter(Filter filter, Pageable pageable) {
+        PaginationResultDTO<StudentCourseMarkEntity> scmFilter = customRepository.studentCourseFilter(filter, pageable);
+
+        List<StudentCourseMark> list = new LinkedList<>();
+        for (StudentCourseMarkEntity entity : scmFilter.getList()) {
+            list.add(toDTO(entity));
+        }
+        return new PageImpl<>(list,pageable,scmFilter.getTotalSize());
+    }
 }

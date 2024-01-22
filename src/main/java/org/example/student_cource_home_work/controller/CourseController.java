@@ -1,6 +1,7 @@
 package org.example.student_cource_home_work.controller;
 
 import org.example.student_cource_home_work.dto.Course;
+import org.example.student_cource_home_work.dto.Filter;
 import org.example.student_cource_home_work.dto.Student;
 import org.example.student_cource_home_work.entity.CourseEntity;
 import org.example.student_cource_home_work.enums.Gender;
@@ -90,5 +91,12 @@ public class CourseController {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         return ResponseEntity.ok(courseService.getCoursePaginationByPrice(pageable,price));
+    }
+    @PostMapping("/courseFilter")//13
+    public ResponseEntity<PageImpl<?>> studentFilter(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                     @RequestParam(value = "size", defaultValue = "2") Integer size,
+                                                     @RequestBody Filter filter) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC,"createdDate"));
+        return ResponseEntity.ok(courseService.courseFilter(filter,pageable));
     }
 }

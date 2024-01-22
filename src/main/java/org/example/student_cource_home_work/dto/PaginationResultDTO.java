@@ -11,5 +11,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaginationResultDTO<T> {
     private Long totalSize;
-    private List<?> list;
+    private List<T> list;
+
+    public PaginationResultDTO() {
+    }
+
+    public PaginationResultDTO(Long totalSize, List<T> list) {
+        this.totalSize = totalSize;
+        this.list = list;
+    }
 }

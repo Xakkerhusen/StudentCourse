@@ -1,10 +1,13 @@
 package org.example.student_cource_home_work.service;
 
 
+import org.example.student_cource_home_work.dto.Filter;
+import org.example.student_cource_home_work.dto.PaginationResultDTO;
 import org.example.student_cource_home_work.dto.Student;
 import org.example.student_cource_home_work.entity.StudentEntity;
 import org.example.student_cource_home_work.enums.Gender;
 import org.example.student_cource_home_work.exp.AppBadException;
+import org.example.student_cource_home_work.repository.CustomRepository;
 import org.example.student_cource_home_work.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -22,6 +25,8 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private CustomRepository customRepository;
 
     public Student create(Student dto) {
         if (dto.getName() == null || dto.getName().trim().length() < 3) {
@@ -71,6 +76,7 @@ public class StudentService {
         }
         return dtoList;
     }
+
     public boolean update(Integer id, Student dto) { // name, surname
         Optional<StudentEntity> optional = studentRepository.findById(id);
         if (optional.isEmpty()) {
@@ -112,6 +118,7 @@ public class StudentService {
 //        return dto;
         return toDTO(entity);
     }
+
     public List<Student> getByName(String name) {
         List<StudentEntity> entityList = studentRepository.findByNameQuery(name);
         List<Student> dtoList = new LinkedList<>();
@@ -121,7 +128,7 @@ public class StudentService {
         return dtoList;
     }
 
- public List<Student> getBySurname(String surname) {
+    public List<Student> getBySurname(String surname) {
         List<StudentEntity> entityList = studentRepository.findBySurnameQuery(surname);
         List<Student> dtoList = new LinkedList<>();
         for (StudentEntity entity : entityList) {
@@ -129,6 +136,7 @@ public class StudentService {
         }
         return dtoList;
     }
+
     public List<Student> getByAge(Integer age) {
         List<StudentEntity> entityList = studentRepository.findByAgeQuery(age);
         List<Student> dtoList = new LinkedList<>();
@@ -137,46 +145,51 @@ public class StudentService {
         }
         return dtoList;
     }
+
     public List<Student> getByGender(Gender gender) {
-        List<StudentEntity>entityList=studentRepository.findByGenderQuery(gender);
-        List<Student>studentList=new LinkedList<>();
+        List<StudentEntity> entityList = studentRepository.findByGenderQuery(gender);
+        List<Student> studentList = new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
+
     public List<Student> getByLevel(Integer level) {
-        List<StudentEntity>entityList=studentRepository.findByLevelQuery(level);
-        List<Student>studentList=new LinkedList<>();
+        List<StudentEntity> entityList = studentRepository.findByLevelQuery(level);
+        List<Student> studentList = new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
+
     public List<Student> getByCreatedDate(LocalDate createdDate) {
         LocalDateTime from = LocalDateTime.of(createdDate, LocalTime.MIN);
         LocalDateTime to = LocalDateTime.of(createdDate, LocalTime.MAX);
-        List<StudentEntity>entityList=studentRepository.findByCreatedDateBetweenQuery(from,to);
-        List<Student>studentList=new LinkedList<>();
+        List<StudentEntity> entityList = studentRepository.findByCreatedDateBetweenQuery(from, to);
+        List<Student> studentList = new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
+
     public List<Student> getByCreatedDateBetween(LocalDate fromCreatedDate, LocalDate toCreatedDate) {
         LocalDateTime from = LocalDateTime.of(fromCreatedDate, LocalTime.MIN);
         LocalDateTime to = LocalDateTime.of(toCreatedDate, LocalTime.MAX);
-        List<StudentEntity>entityList=studentRepository.findByCreatedDateBetweenQuery(from,to);
-        List<Student>studentList=new LinkedList<>();
+        List<StudentEntity> entityList = studentRepository.findByCreatedDateBetweenQuery(from, to);
+        List<Student> studentList = new LinkedList<>();
         for (StudentEntity studentEntity : entityList) {
             studentList.add(toDTO(studentEntity));
         }
         return studentList;
     }
+
     public PageImpl<Student> getPaginationByLevel(Integer page, Integer size, Integer level) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable pageable = PageRequest.of(page - 1, size,sort);
-        Page<StudentEntity> studentPage = studentRepository.findByLevelQuery(level,pageable);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<StudentEntity> studentPage = studentRepository.findByLevelQuery(level, pageable);
 
         List<StudentEntity> content = studentPage.getContent();
         Long totalElements = studentPage.getTotalElements();
@@ -185,8 +198,9 @@ public class StudentService {
         for (StudentEntity entity : content) {
             dtoList.add(toDTO(entity));
         }
-        return new PageImpl<>(dtoList,pageable,totalElements);
+        return new PageImpl<>(dtoList, pageable, totalElements);
     }
+
     public PageImpl<Student> getPaginationByGender(Integer page, Integer size, String gender) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(page - 1, size, sort);
@@ -194,7 +208,7 @@ public class StudentService {
         Page<StudentEntity> byGender = studentRepository.findByGenderQuery(gender1, pageable);
         List<StudentEntity> content = byGender.getContent();
         long totalElements = byGender.getTotalElements();
-        List<Student>dtoList=new LinkedList<>();
+        List<Student> dtoList = new LinkedList<>();
         for (StudentEntity entity : content) {
             dtoList.add(toDTO(entity));
         }
@@ -207,8 +221,7 @@ public class StudentService {
 //    }
 
 
-
-    public Student toDTO(StudentEntity entity){
+    public Student toDTO(StudentEntity entity) {
         Student dto = new Student();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
@@ -221,7 +234,7 @@ public class StudentService {
         return dto;
     }
 
-    public StudentEntity get(Integer id){
+    public StudentEntity get(Integer id) {
         Optional<StudentEntity> optional = studentRepository.findById(id);
         if (optional.isEmpty()) {
             throw new AppBadException("Student not found");
@@ -230,7 +243,15 @@ public class StudentService {
     }
 
 
+    public PageImpl<Student> studentFilter(Filter filter, Pageable pageable) {
+        PaginationResultDTO<StudentEntity> filter1 = customRepository.studentFilter(filter, pageable);
 
+        List<Student> studentList=new LinkedList<>();
+        for (StudentEntity entity : filter1.getList()) {
+            studentList.add(toDTO(entity));
+        }
+        return new PageImpl<>(studentList,pageable,filter1.getTotalSize());
+    }
 }
 
 

@@ -1,12 +1,15 @@
 package org.example.student_cource_home_work.service;
 
 import org.example.student_cource_home_work.dto.Course;
+import org.example.student_cource_home_work.dto.Filter;
+import org.example.student_cource_home_work.dto.PaginationResultDTO;
 import org.example.student_cource_home_work.dto.Student;
 import org.example.student_cource_home_work.entity.CourseEntity;
 import org.example.student_cource_home_work.entity.StudentEntity;
 import org.example.student_cource_home_work.enums.Gender;
 import org.example.student_cource_home_work.exp.AppBadException;
 import org.example.student_cource_home_work.repository.CourseRepository;
+import org.example.student_cource_home_work.repository.CustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ import java.util.Optional;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CustomRepository customRepository;
 
     public Course create(Course dto) {
         if (dto.getName() == null || dto.getName().trim().length() < 3) {
@@ -160,15 +165,25 @@ public class CourseService {
 
         return new PageImpl<>(dtoList, pageable, totalElements);
     }
+
     public PageImpl<Course> getCoursePaginationByPrice(Pageable pageable, Integer price) {
         Page<CourseEntity> byPrice = courseRepository.findByPriceQuery(pageable, price);
-        List<Course>dtoList=new LinkedList<>();
+        List<Course> dtoList = new LinkedList<>();
         List<CourseEntity> content = byPrice.getContent();
         long totalElements = byPrice.getTotalElements();
         for (CourseEntity entity : content) {
             dtoList.add(toDTO(entity));
         }
-        return new PageImpl<>(dtoList,pageable,totalElements);
+        return new PageImpl<>(dtoList, pageable, totalElements);
+    }
+
+    public PageImpl<Course> courseFilter(Filter filter, Pageable pageable) {
+        PaginationResultDTO<CourseEntity> resultFilter = customRepository.courseFilter(filter, pageable);
+        List<Course>courses=new LinkedList<>();
+        for (CourseEntity entity : resultFilter.getList()) {
+            courses.add(toDTO(entity));
+        }
+        return new PageImpl<>(courses,pageable,resultFilter.getTotalSize());
     }
 
     public Course toDTO(CourseEntity entity) {
@@ -187,7 +202,6 @@ public class CourseService {
         }
         return optional.get();
     }
-
 
 
 }

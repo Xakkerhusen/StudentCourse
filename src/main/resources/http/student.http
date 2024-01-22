@@ -10,6 +10,15 @@ Content-Type: application/json
   "gender": "WOMAN",
   "age": 20
 }
+###Student Filter
+POST localhost:8081/student/studentFilter
+Content-Type: application/json
+
+{
+  "name": "Heath",
+  "surname": "Pllu",
+  "age": 15
+}
 
 ### Get student list
 GET localhost:8081/student
@@ -52,7 +61,6 @@ Content-Type: application/json
   "phone": "+022",
   "age": 28
 }
-
 
 ###Delete student by id
 DELETE localhost:8081/student/6

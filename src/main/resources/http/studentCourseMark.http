@@ -7,6 +7,15 @@ Content-Type: application/json
   "studentId": 1,
   "courseId": 10
 }
+###  studentCourseMark filter
+POST localhost:8081/student_course_mark/studentCourseFilter
+Content-Type: application/json
+
+{
+  "markFrom": 4,
+  "studentId": 1,
+  "courseId": 10
+}
 
 ### Get student list
 GET localhost:8081/student_course_mark
@@ -73,5 +82,11 @@ GET localhost:8081/student_course_mark/pagination?page=2&size=2
 GET localhost:8081/student_course_mark/paginationByStudentId?page=3&studentId=1
 ###Get student pagination  by given studentId
 GET localhost:8081/student_course_mark/paginationByCourseId?page=1&courseId=10
+###Get student getByStudentIgMarkList
+GET localhost:8081/student_course_mark/25?studentId=1
+###Get student getByStudentIgMarkList
+GET localhost:8081/student_course_mark/26?courseId=10
+###Get student getAllByInnerJoin
+GET localhost:8081/student_course_mark/27
 
 ###2024-01-13T18:02:31.085951

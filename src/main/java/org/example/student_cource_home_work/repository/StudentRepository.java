@@ -41,5 +41,7 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Integer
     Page<StudentEntity> findByLevelQuery(Integer level, Pageable pageable);
     @Query("from StudentEntity where gender =?1")
     Page<StudentEntity> findByGenderQuery(Gender gender, Pageable pageable);
-    
+
+
+
 }

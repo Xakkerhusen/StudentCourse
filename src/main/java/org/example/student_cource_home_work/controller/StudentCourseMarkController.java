@@ -1,6 +1,7 @@
 package org.example.student_cource_home_work.controller;
 
 import org.example.student_cource_home_work.dto.Course;
+import org.example.student_cource_home_work.dto.Filter;
 import org.example.student_cource_home_work.dto.Student;
 import org.example.student_cource_home_work.dto.StudentCourseMark;
 import org.example.student_cource_home_work.entity.CourseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,14 +127,6 @@ public class StudentCourseMarkController {
     public ResponseEntity<Integer> getNumberOfGradesInTheCourse(@RequestParam("courseId") Integer courseId) {
         return ResponseEntity.ok(studentCourseMarkService.getNumberOfGradesInTheCourse(courseId));
     }
-//    @GetMapping("getCoursePaginationById")//23
-//    public ResponseEntity<PageImpl<StudentCourseMark>> getCoursePaginationById(@RequestParam(value = "page",defaultValue = "1") Integer page,
-//                                                                       @RequestParam(value = "size",defaultValue = "2") Integer size,
-//                                                                       @RequestParam("studentId") Integer studentId){
-//        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-//        Pageable pageable = PageRequest.of(page - 1, size, sort);
-//        return ResponseEntity.ok(studentCourseMarkService.getCoursePaginationById(pageable,studentId));
-//    }
 
     @GetMapping("/pagination")//22
     public ResponseEntity<PageImpl<StudentCourseMark>> pagination(@RequestParam(value = "page",defaultValue = "1") int page,
@@ -145,7 +139,7 @@ public class StudentCourseMarkController {
 
     @GetMapping("/paginationByStudentId")//23
     public ResponseEntity<PageImpl<StudentCourseMark>> paginationByStudentId(@RequestParam(value = "page",defaultValue = "1") int page,
-                                                                                @RequestParam(value = "size",defaultValue = "2") int size,
+                                                                                @RequestParam(value = "size",defaultValue = "3") int size,
                                                                                 @RequestParam("studentId") Integer studentId) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
 
@@ -162,6 +156,28 @@ public class StudentCourseMarkController {
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         return ResponseEntity.ok(studentCourseMarkService.paginationByCourseId(courseId,pageable));
     }
+    @GetMapping("/25")
+    public ResponseEntity<?>getByStudentIdMarkList(@RequestParam("studentId")Integer id){
+        return ResponseEntity.ok(studentCourseMarkService.getByStudentIdMarkList(id));
+    }
+     @GetMapping("/26")
+    public ResponseEntity<?>getByCourseIdMarkList(@RequestParam("courseId")Integer id){
+        return ResponseEntity.ok(studentCourseMarkService.getByCourseIdMarkList(id));
+    }
+
+     @GetMapping("/27")
+    public ResponseEntity<?>getAllByInnerJoin(){
+        return ResponseEntity.ok(studentCourseMarkService.getAllByInnerJoin());
+    }
+
+  @PostMapping("/studentCourseFilter")
+    public ResponseEntity<?>filter(@RequestParam(value = "page",defaultValue = "1") Integer page,
+                                   @RequestParam(value = "size",defaultValue = "2")Integer size,
+                                   @RequestBody Filter filter){
+      Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+      return ResponseEntity.ok(studentCourseMarkService.filter(filter,pageable));
+    }
+
 
 //    @GetMapping("/bySurname")
 //    public ResponseEntity<List<Student>> getBySurname(@RequestParam("surname") String surname) {

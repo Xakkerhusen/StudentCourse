@@ -22,11 +22,11 @@ public class StudentCourseMarkEntity /*extends BaseEntity*/ {
     private LocalDateTime createdDate;
 
     @JoinColumn(name = "student_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private StudentEntity student;
 
     @JoinColumn(name = "course_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private CourseEntity course;
 
 

@@ -7,7 +7,15 @@ Content-Type: application/json
   "price": 2000,
   "duration": "aaalalalal"
 }
+###  COURSE Filter
+POST localhost:8081/course/courseFilter
+Content-Type: application/json
 
+{
+  "name": "aaaaaaaaaaaaa",
+  "price": 2000,
+  "duration": "aaalalalal"
+}
 ### Get course list
 GET localhost:8081/course
 
